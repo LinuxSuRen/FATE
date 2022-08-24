@@ -500,22 +500,8 @@ class Federation(object):
         self._party: Party = party
         self._session = session
         self._max_message_size = DEFAULT_MESSAGE_MAX_SIZE
-        self._federation_status_table = _create_table(
-            session=session,
-            name=self._get_status_table_name(self._party),
-            namespace=self._session_id,
-            partitions=1,
-            need_cleanup=True,
-            error_if_exist=False,
-        )
-        self._federation_object_table = _create_table(
-            session=session,
-            name=self._get_object_table_name(self._party),
-            namespace=self._session_id,
-            partitions=1,
-            need_cleanup=True,
-            error_if_exist=False,
-        )
+        self._fed_object_table = None
+        self._fed_status_table = None
         self._other_status_tables = {}
         self._other_object_tables = {}
         self._even_loop = None
@@ -525,6 +511,32 @@ class Federation(object):
         if self._even_loop is None:
             self._even_loop = asyncio.get_event_loop()
         return self._even_loop
+
+    @property
+    def _federation_status_table(self):
+        if self._fed_status_table is None:
+            self._fed_status_table = _create_table(
+                session=self._session,
+                name=self._get_status_table_name(self._party),
+                namespace=self._session_id,
+                partitions=1,
+                need_cleanup=True,
+                error_if_exist=False,
+            )
+        return self._fed_status_table
+
+    @property
+    def _federation_object_table(self):
+        if self._fed_object_table is None:
+            self._fed_object_table = _create_table(
+                session=self._session,
+                name=self._get_object_table_name(self._party),
+                namespace=self._session_id,
+                partitions=1,
+                need_cleanup=True,
+                error_if_exist=False,
+            )
+        return self._fed_object_table
 
     @staticmethod
     def _get_status_table_name(party):
