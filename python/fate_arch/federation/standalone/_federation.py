@@ -54,7 +54,7 @@ class Federation(FederationABC):
         rtn = self._federation.get(name=name, tag=tag, parties=parties)
         return [Table(r) if isinstance(r, RawTable) else r for r in rtn]
 
-    def destroy(self, parties):
+    def destroy(self, parties=None):
         self._federation.destroy()
 
 

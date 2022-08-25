@@ -51,6 +51,13 @@ class Federation(FederationABC):
     def session_id(self) -> str:
         return self._session_id
 
+    def __del__(self):
+        try:
+            LOGGER.info(f"Federation __del__: {self.session_id}")
+            self.destroy()
+        except Exception:
+            pass
+
     def get(self, name, tag, parties, gc):
         parties = [(party.role, party.party_id) for party in parties]
         raw_result = _get(name, tag, parties, self._rsc, gc)
@@ -63,7 +70,7 @@ class Federation(FederationABC):
         parties = [(party.role, party.party_id) for party in parties]
         _remote(v, name, tag, parties, self._rsc, gc)
 
-    def destroy(self, parties):
+    def destroy(self, parties=None):
         self._rp_ctx.cleanup(name="*", namespace=self._session_id)
 
 

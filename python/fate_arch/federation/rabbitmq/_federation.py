@@ -112,7 +112,7 @@ class Federation(FederationBase):
     def __getstate__(self):
         pass
 
-    def destroy(self, parties):
+    def destroy(self, parties=None):
         LOGGER.debug("[rabbitmq.cleanup]start to cleanup...")
         for party in parties:
             if self._party == party:

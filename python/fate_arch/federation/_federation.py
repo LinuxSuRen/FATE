@@ -81,7 +81,7 @@ class FederationBase(FederationABC):
     def session_id(self) -> str:
         return self._session_id
 
-    def destroy(self, parties):
+    def destroy(self, parties=None):
         raise NotImplementedError()
 
     def get(

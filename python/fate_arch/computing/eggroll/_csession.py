@@ -46,6 +46,13 @@ class CSession(CSessionABC):
     def session_id(self):
         return self._session_id
 
+    def __del__(self):
+        try:
+            LOGGER.info(f"CSession __del__: {self.session_id}")
+            self.destroy()
+        except Exception:
+            pass
+
     @computing_profile
     def load(self, address: AddressABC, partitions: int, schema: dict, **kwargs):
 

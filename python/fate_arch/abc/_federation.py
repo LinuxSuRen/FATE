@@ -74,7 +74,7 @@ class FederationABC(metaclass=ABCMeta):
         ...
 
     @abc.abstractmethod
-    def destroy(self, parties):
+    def destroy(self, parties=None):
         """
         destroy federation from ``parties``
 

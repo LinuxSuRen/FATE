@@ -143,6 +143,13 @@ class StorageSessionBase(StorageSessionABC):
     def __exit__(self, exc_type, exc_value, traceback):
         self.destroy()
 
+    def __del__(self):
+        try:
+            LOGGER.info(f"StorageSession __del__: {self.session_id}")
+            self.destroy()
+        except Exception:
+            pass
+
     def destroy(self):
         try:
             self.stop()
